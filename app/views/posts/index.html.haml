@@ -1,1 +1,4 @@
-%h1 Luke Bickle is killing it! Why because he just man handled the database to controll the view
+- @posts.each do |post|
+  %h2= link_to post.title, post
+
+  = link_to "Add new inspiration", new_post_path
