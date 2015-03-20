@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :find_post, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user!, except: [:index, :show]
+  #from devise - anything they try to do that a user is not authorized to, they will get routed to the sign in page
 
   def index
     @posts = Post.all.order("created_at DESC")
@@ -11,11 +12,13 @@ class PostsController < ApplicationController
   end
 
   def new
-    @post = Post.new
+    @post = current_user.posts.build  #@post = Post.new = helps with the user-id colomn being filled in
   end
 
   def create
-    @post = Post.new(post_params)
+    @post = current_user.posts.build(post_params)   #@post = Post.new(post_params)
+    # makes sure the user id column in the post table is filled in when we create a post
+    # add before_action from devise - authe.
 
     if @post.save
       redirect_to @post
